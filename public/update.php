@@ -40,24 +40,32 @@ foreach($dateList as $date) {
                 $success6Amount = 0;
 
                 foreach($data->bilenKisiler as $success) {
+                    $count = str_replace('YOK', 0, $success->kisiSayisi);
+                    $amount = str_replace('YOK', 0, $success->kisiBasinaDusenIkramiye);
+
                     if ($success->tur == '$3_BILEN') {
-                        $success3Count = $success->kisiSayisi;
-                        $success3Amount = $success->kisiBasinaDusenIkramiye;
+                        $success3Count = $count;
+                        $success3Amount = $amount;
                     } else if ($success->tur == '$4_BILEN') {
-                        $success4Count = $success->kisiSayisi;
-                        $success4Amount = $success->kisiBasinaDusenIkramiye;
+                        $success4Count = $count;
+                        $success4Amount = $amount;
                     } else if ($success->tur == '$5_BILEN') {
-                        $success5Count = $success->kisiSayisi;
-                        $success5Amount = $success->kisiBasinaDusenIkramiye;
+                        $success5Count = $count;
+                        $success5Amount = $amount;
                     } else if ($success->tur == '$6_BILEN') {
-                        $success6Count = $success->kisiSayisi;
-                        $success6Amount = $success->kisiBasinaDusenIkramiye;
+                        $success6Count = str_replace('YOK', 0, $count);
+                        $success6Amount = $amount;
                     }
+                }
+
+                $cycleCount = !empty($data->devirSayisi) ? $data->devirSayisi : 0;
+                if (!empty($data->devretti) && empty($cycleCount)) {
+                    $cycleCount = 1;
                 }
 
                 $sql = "INSERT INTO loto_history (`json`, `date`, `week`, `oid`, `cycle_count`, 
 `success_3_count`, `success_4_count`, `success_5_count`, `success_6_count`, `success_3_amount`, `success_4_amount`, `success_5_amount`, `success_6_amount`) 
-VALUES ('{$resultsJson}', '{$dateView}', '{$data->hafta}', '{$data->oid}', '{$data->devirSayisi}',
+VALUES ('{$resultsJson}', '{$dateView}', '{$data->hafta}', '{$data->oid}', '{$cycleCount}',
 '{$success3Count}',  '{$success4Count}',  '{$success5Count}',  '{$success6Count}',
 '{$success3Amount}',  '{$success4Amount}',  '{$success5Amount}',  '{$success6Amount}')";
                 $stmt = $dbh->prepare($sql);

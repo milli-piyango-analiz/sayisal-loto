@@ -11,6 +11,12 @@
  - includes/connect.php içinde db ayarlarınızı girin.
  - php public/update.php dosyasını çalıştırarak crawling başlatın
  
+## Örnek SQL
+
+ - Hangi Rakam kaç kere çekildi.
+ 
+   SELECT count(number), number FROM loto_numbers GROUP BY number ORDER BY count(number)
+ 
 ## TODO List
 
  - Veri Raporlama
